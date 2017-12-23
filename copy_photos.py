@@ -35,6 +35,8 @@ for file in os.listdir(copy_from_directory): #For all files in picture directory
 
             year, month, day = date.split(':', 2)
             hour, minute, second = time.split(':', 2)
+            int_minute = int(minute)
+            int_hour = int(hour)
             h = hour
 
             if year == '2017':
@@ -49,12 +51,17 @@ for file in os.listdir(copy_from_directory): #For all files in picture directory
                             or h=='11' or h=='13' or h=='14'
                             or h=='15' or h=='16'):
 
-                            date_and_time = date.replace(':', '_') + '-' + time.replace(':', '_') + '.jpg'
-                            print('copying file: ' + current_file)
-                            new_file_name_and_path = os.path.join(copy_to_directory, date_and_time)
-                            copyfile(current_file, new_file_name_and_path) # Copy the picture
-                            copies += 1
-                            print('Files copied: ' + str(copies))
+                            if ((int_hour < 13 and int_minute > 0 and int_minute < 48) or
+                                    (int_hour >= 13 and int_minute > 15 or int_minute < 2)):
+
+                                date_and_time = date.replace(':', '_') + '-' + time.replace(':', '_') + '.jpg'
+                                print('copying file: ' + current_file)
+                                new_file_name_and_path = os.path.join(copy_to_directory, date_and_time)
+                                copyfile(current_file, new_file_name_and_path) # Copy the picture
+                                copies += 1
+                                print('Files copied: ' + str(copies))
+                            else:
+                                print('Wrong minute: ' + minute)
                         else:
                             print('Wrong hour: ' + hour)
                             continue
@@ -80,3 +87,4 @@ for file in os.listdir(copy_from_directory): #For all files in picture directory
         sys.exit(0)
         pass
 
+print('Number of pictures copied:' + copies)
